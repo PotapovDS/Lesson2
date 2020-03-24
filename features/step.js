@@ -25,14 +25,12 @@ Given('ходит игрок {int}', (i) => {
 });
 
 When('игрок ходит в клетку {int}, {int}', (x, y) => {
-  if (controller.isCellEmpty(x, y)) {
-    request(app)
-      .post('/move')
-      .send({ x, y })
-      .then((res) => {
-        lastResult = res;
-      });
-  }
+  return request(app)
+    .post('/move')
+    .send({ x, y })
+    .then((res) => {
+      lastResult = res;
+    });
 });
 
 Then('поле становится {string}', (testField) => {
