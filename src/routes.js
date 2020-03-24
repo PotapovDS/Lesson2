@@ -13,6 +13,6 @@ router.post('/move', (req, res) => {
 router.post('/reset', (req, res) => {
   controller.reset();
   res.status(200).send('ok');
-})
+});
 
 module.exports = router;
