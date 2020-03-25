@@ -49,3 +49,7 @@ Then('возвращается ошибка', () => {
     .send({ error: 'клетка занята' })
     .expect(200);
 });
+
+Then('победил игрок {int}', (testPlayer) => {
+  assert.equal(controller.isPlayerWin(testPlayer), true);
+});

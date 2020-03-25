@@ -5,6 +5,10 @@ router.get('/getField', (req, res) => {
   res.status(200).send(controller.getField());
 });
 
+router.get('/getPlayer', (req, res) => {
+  res.status(200).send(controller.getCurrentPlayer());
+});
+
 router.post('/move', (req, res) => {
   controller.makeMove(req.body.x - 1, req.body.y - 1);
   res.status(200).send('ok');
