@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const controller = require('./game');
+const logger = require('./lib/logger');
 
 router.get('/getField', (req, res) => {
   res.status(200).send(controller.getField());
@@ -9,8 +10,26 @@ router.get('/getPlayer', (req, res) => {
   res.status(200).send(controller.getCurrentPlayer());
 });
 
+router.get('/getWinner', (req, res) => {
+  let currentPlayer = controller.getCurrentPlayer();
+  res.status(200).send(controller.isPlayerWin(player));
+});
+
 router.post('/move', (req, res) => {
-  controller.makeMove(req.body.x - 1, req.body.y - 1);
+  let x = req.body.x - 1;
+  let y = req.body.y - 1;
+
+  if (!controller.isNoMoves()) {
+    if (controller.isCellEmpty(x, y)) {
+      controller.makeMove(x, y);
+    } else {
+      logger.log('Клетка занята');
+    }
+  } else {
+    controller.reset();
+    logger.log('ходов больше нет');
+  }
+
   res.status(200).send('ok');
 });
 

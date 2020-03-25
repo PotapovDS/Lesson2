@@ -7,32 +7,39 @@ let player = 1;
 function getField() {
   return field;
 }
+
 function getCurrentPlayer() {
   return player;
 }
+
 function isCellEmpty(x, y) {
   return (field[y][x] == 0);
 }
+
 function makeMove(x, y) {
   if (isCellEmpty(x, y)) {
     field[y][x] = player;
     player = player === 2 ? 1 : 2;
   }
 }
+
 function reset() {
   field = START_FIELD;
 }
+
 function presetField(newField) {
   field = newField;
 }
+
 function setCurrentPlayer(i) {
   player = i;
 }
+
 function showError(error) {
   logger.log(error.body.error);
 }
+
 function isPlayerWin(testPlayer) {
-  logger.log(testPlayer);
   for (let i = 0; i < 3; i += 1) {
     // горизонталь
     if (field[i][0] == testPlayer
@@ -41,7 +48,6 @@ function isPlayerWin(testPlayer) {
       return true;
     }
   }
-
   for (let i = 0; i < 3; i += 1) {
     // вертикаль
     if (field[0][0] == testPlayer
@@ -66,6 +72,15 @@ function isPlayerWin(testPlayer) {
   return false;
 }
 
+function isNoMoves() {
+  for (let y = 0; y < 3; y += 1) {
+    for (let x = 0; x < 3; x += 1) {
+      if (field[y][x] === 0) return false;
+    }
+  }
+  return true;
+}
+
 module.exports = {
   getField,
   makeMove,
@@ -75,4 +90,5 @@ module.exports = {
   getCurrentPlayer,
   showError,
   isPlayerWin,
+  isNoMoves,
 };
