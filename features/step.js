@@ -35,16 +35,17 @@ When('игрок ходит в клетку {int}, {int}', (x, y) => {
 
 Then('поле становится {string}', (testField) => {
   field = controller.getField();
-  const actualField = field.map((item) => item.join('')).join('|');
-  assert.equal(actualField, testField);
+  const fieldToString = field.map((item) => item.join('')).join('|');
+  assert.equal(fieldToString, testField);
 });
 
 Given('поле {string}', (testField) => {
   controller.presetField(convertFieldToArray(testField));
 });
 
-Then('возвращается ошибка', () => {});
-// Then('поле становится {string}', (testField) => {
-//   const newField = convertFieldToArray(testField);
-//   assert.equal(field, newField);
-// })
+Then('возвращается ошибка', () => {
+  return request(app)
+    .post('/error')
+    .send({ error: 'клетка занята' })
+    .expect(200);
+});

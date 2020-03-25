@@ -25,6 +25,9 @@ function presetField(newField) {
 function setCurrentPlayer(i) {
   player = i;
 }
+function showError(error) {
+  logger.log(error.body.error);
+}
 
 module.exports = {
   getField,
@@ -32,4 +35,5 @@ module.exports = {
   reset,
   presetField,
   setCurrentPlayer,
+  showError,
 };

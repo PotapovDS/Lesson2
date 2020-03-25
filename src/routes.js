@@ -15,4 +15,9 @@ router.post('/reset', (req, res) => {
   res.status(200).send('ok');
 });
 
+router.post('/error', (req, res) => {
+  controller.showError(req);
+  res.status(200).send('ok');
+});
+
 module.exports = router;
