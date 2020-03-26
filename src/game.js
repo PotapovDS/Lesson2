@@ -91,4 +91,5 @@ module.exports = {
   showError,
   isPlayerWin,
   isNoMoves,
+  isCellEmpty,
 };
