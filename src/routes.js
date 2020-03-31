@@ -38,7 +38,27 @@ router.post('/login', (req, res) => {
   const userId = users.checkLogin(req.body.login, req.body.password);
   res.send(200, userId);
 });
-
+// регистрация
+router.post('/register', (req, res) => {
+  res.send(200, 'ok');
+});
+// создание игры
+router.post('/newGame', users.restricted, (req, res) => {
+  res.send(200, 'ok');
+});
+// список акивных игр
+router.post('/gamesList', users.restricted, (req, res) => {
+  res.send(200, 'ok');
+});
+// присоединится к игре
+router.post('/joinGame', users.restricted, (req, res) => {
+  res.send(200, 'ok');
+});
+// сатус игры
+router.post('/gameStatus', users.restricted, (req, res) => {
+  res.send(200, 'ok');
+});
+// сброс игры
 router.post('/reset', users.restricted, (req, res) => {
   controller.reset();
   res.status(200).send('ok');

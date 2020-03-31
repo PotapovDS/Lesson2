@@ -19,7 +19,6 @@ function checkSession(sessionID) {
   return sessions[sessionID];
 }
 function authMiddleware(req, res, next) {
-  console.log();
   const userData = checkSession(req.headers.authorization);
   req.userCredentials = userData;
   next();
@@ -30,7 +29,6 @@ function restricted(req, res, next) {
     res.send(401);
     return;
   }
-
   next();
 }
 
@@ -44,6 +42,10 @@ function checkLogin(login, password) {
     return sessionID;
   }
   return -1;
+}
+
+function registerNewUser(login, password) {
+
 }
 
 
