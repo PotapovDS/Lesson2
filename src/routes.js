@@ -1,21 +1,22 @@
 const router = require('express').Router();
 const controller = require('./game');
 const logger = require('./lib/logger');
+const users = require('./lib/users');
 
-router.get('/getField', (req, res) => {
-  res.status(200).send(controller.getField());
+router.get('/getField', users.restricted, (req, res) => {
+  res.send(200, controller.getField());
 });
 
-router.get('/getPlayer', (req, res) => {
+router.get('/getPlayer', users.restricted, (req, res) => {
   res.status(200).send(controller.getCurrentPlayer());
 });
 
-router.get('/getWinner', (req, res) => {
+router.get('/getWinner', users.restricted, (req, res) => {
   let currentPlayer = controller.getCurrentPlayer();
   res.status(200).send(controller.isPlayerWin(player));
 });
 
-router.post('/move', (req, res) => {
+router.post('/move', users.restricted, (req, res) => {
   let x = req.body.x - 1;
   let y = req.body.y - 1;
 
@@ -32,13 +33,19 @@ router.post('/move', (req, res) => {
 
   res.status(200).send('ok');
 });
+// авторизация
+router.post('/login', (req, res) => {
+  const userId = users.checkLogin(req.body.login, req.body.password);
+  res.send(200, userId);
+});
 
-router.post('/reset', (req, res) => {
+router.post('/reset', users.restricted, (req, res) => {
   controller.reset();
   res.status(200).send('ok');
 });
 
-router.post('/error', (req, res) => {
+
+router.post('/error', users.restricted, (req, res) => {
   controller.showError(req);
   res.status(200).send('ok');
 });
