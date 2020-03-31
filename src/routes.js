@@ -2,6 +2,7 @@ const router = require('express').Router();
 const controller = require('./game');
 const logger = require('./lib/logger');
 const users = require('./lib/users');
+const games = require('./lib/games');
 
 router.get('/getField', users.restricted, (req, res) => {
   res.send(200, controller.getField());
@@ -40,22 +41,35 @@ router.post('/login', (req, res) => {
 });
 // регистрация
 router.post('/register', (req, res) => {
+  if (!users.registerNewUser(req.body.login, req.body.password)) {
+    res.send(208, 'пользователь уже зарегистрирован');
+  }
   res.send(200, 'ok');
 });
 // создание игры
 router.post('/newGame', users.restricted, (req, res) => {
-  res.send(200, 'ok');
-});
-// список акивных игр
-router.post('/gamesList', users.restricted, (req, res) => {
+  const user = users.defineLoginById(req.userCredentials.id);
+  games.startNewGame(user.login);
   res.send(200, 'ok');
 });
 // присоединится к игре
 router.post('/joinGame', users.restricted, (req, res) => {
   res.send(200, 'ok');
 });
+
+// список игроков
+router.get('/usersList', users.restricted, (req, res) => {
+  res.send(200, users.users);
+});
+// список акивных игр
+router.get('/gamesList', users.restricted, (req, res) => {
+  res.send(200, games.games);
+});
 // сатус игры
-router.post('/gameStatus', users.restricted, (req, res) => {
+router.get('/gameStatus', users.restricted, (req, res) => {
+  res.send(200, 'ok');
+});
+router.get('/gameStatus', users.restricted, (req, res) => {
   res.send(200, 'ok');
 });
 // сброс игры

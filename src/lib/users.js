@@ -15,7 +15,7 @@ const users = [
 
 const sessions = {};
 
-function checkSession(sessionID) {
+function checkSession(sessionID) { // получаем id пользователя
   return sessions[sessionID];
 }
 function authMiddleware(req, res, next) {
@@ -44,8 +44,22 @@ function checkLogin(login, password) {
   return -1;
 }
 
-function registerNewUser(login, password) {
+function defineLoginById(userId) {
+  return users.find((el) => el.id === userId);
+}
 
+function registerNewUser(login, password) {
+  if (users.find((el) => el.login === login)) {
+    return false;
+  }
+  const newUser = {
+    id: users.length + 1,
+    login,
+    password,
+  };
+  console.log(newUser);
+  users.push(newUser);
+  return true;
 }
 
 
@@ -54,4 +68,7 @@ module.exports = {
   checkSession,
   authMiddleware,
   restricted,
+  registerNewUser,
+  defineLoginById,
+  users,
 };
