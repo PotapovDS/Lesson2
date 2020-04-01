@@ -7,20 +7,10 @@ const games = [];
 //       field: [],
 //       currentPlayer,
 //       status,
+//       winner,
 //     },
 //   ];
 
-function startNewGame(parentUser) {
-  const newGame = {
-    gameId: games.length + 1,
-    parentUser,
-    field: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
-    currentPlayer: parentUser,
-  };
-  games.push(newGame);
-}
-
 module.exports = {
-  startNewGame,
   games,
 };

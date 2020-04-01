@@ -1,16 +1,15 @@
 const logger = require('./lib/logger');
+const { games } = require('./lib/games');
 
 const START_FIELD = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-let field = START_FIELD;
-let player = 1;
 
-function getField() {
-  return field;
+function findGame(gameId) {
+  return games.find((el) => el.id === gameId);
 }
 
-function getCurrentPlayer() {
-  return player;
-}
+// function getField() {
+//   return field;
+// }
 
 function isCellEmpty(x, y) {
   return (field[y][x] == 0);
@@ -23,16 +22,28 @@ function makeMove(x, y) {
   }
 }
 
-function reset() {
-  field = START_FIELD;
+function reset(gameId) {
+  const game = findGame(gameId);
+  game.field = START_FIELD;
+}
+
+function getWinner(gameId) {
+  const game = findGame(gameId);
+  return game.winner;
 }
 
 function presetField(newField) {
-  field = newField;
+  const game = findGame(gameId);
+  game.field = newField;
 }
 
-function setCurrentPlayer(i) {
-  player = i;
+function setCurrentPlayer(gameId, user) {
+  
+}
+
+function getCurrentPlayer(gameId) {
+  const game = findGame(gameId);
+  return game.currentPlayer;
 }
 
 function showError(error) {
@@ -81,15 +92,51 @@ function isNoMoves() {
   return true;
 }
 
+function startNewGame(parentUser) {
+  const newGame = {
+    gameId: games.length + 1,
+    parentUser,
+    field: START_FIELD,
+    currentPlayer: parentUser,
+    status: true,
+  };
+  games.push(newGame);
+}
+
+function joinGame(gameId, user) {
+  const game = findGame(gameId);
+  if (game.player2) return false;
+  game.player2 = user;
+  return true;
+}
+
+function getGameStatus(gameId) {
+  const game = findGame(gameId);
+  return game.status;
+}
+
+function isPlayerInGame(gameId, user) {
+  const game = findGame(gameId);
+  if (game.parentUser === user || game.player2 === user) {
+    return true;
+  }
+  return false;
+}
+
 module.exports = {
   getField,
   makeMove,
   reset,
   presetField,
-  setCurrentPlayer,
   getCurrentPlayer,
+  setCurrentPlayer,
   showError,
   isPlayerWin,
   isNoMoves,
   isCellEmpty,
+  getWinner,
+  startNewGame,
+  joinGame,
+  getGameStatus,
+  isPlayerInGame,
 };

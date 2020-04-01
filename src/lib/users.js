@@ -5,11 +5,13 @@ const users = [
     id: 1,
     login: 'max',
     password: 'qwerty',
+    isLogged: false,
   },
   {
     id: 2,
     login: 'ivan',
     password: 'ytrewq',
+    isLogged: false,
   },
 ];
 
@@ -39,6 +41,7 @@ function checkLogin(login, password) {
     sessions[sessionID] = {
       id: user.id,
     };
+    user.isLogged = true;
     return sessionID;
   }
   return -1;
@@ -56,6 +59,7 @@ function registerNewUser(login, password) {
     id: users.length + 1,
     login,
     password,
+    isLogged: false,
   };
   console.log(newUser);
   users.push(newUser);
