@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const controller = require('./game');
-const logger = require('./lib/logger');
 const users = require('./lib/users');
 const games = require('./lib/games');
 
@@ -30,24 +29,9 @@ router.post('/move', users.restricted, (req, res) => {
   if (controller.getCurrentPlayer(gameId) !== user) {
     res.send(208, 'сейчас не Ваш ход');
   }
-
   const x = req.body.x - 1;
   const y = req.body.y - 1;
-
-  // НАЧАЛО код, который нужно переделать
-
-  if (!controller.isNoMoves()) {
-    if (controller.isCellEmpty(x, y)) {
-      controller.makeMove(x, y);
-    } else {
-      logger.log('Клетка занята');
-    }
-  } else {
-    controller.reset();
-    logger.log('ходов больше нет');
-  }
-  // КОНЕЦ код который нужно переделать
-
+  controller.makeMove(x, y, gameId);
   res.status(200).send('ok');
 });
 
