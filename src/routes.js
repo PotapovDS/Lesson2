@@ -20,11 +20,11 @@ router.post('/move', users.restricted, (req, res) => {
   const { gameId } = req.headers;
   const user = users.defineLoginById(req.userCredentials.id);
 
-  if (!controller.isGameActive(gameId)) {
-    res.send(208, 'эта игра закончена, выберите другую');
-  }
+  // if (!controller.isGameActive(gameId)) {
+  //   res.send(208, 'эта игра закончена, выберите другую');
+  // }
   if (!controller.isPlayerInGame(gameId, user)) {
-    res.send(208, 'вы не зарегистрированы, как игрок этой партии');
+    res.send(208, `вы ${user} не зарегистрированы, как игрок этой партии`);
   }
   if (controller.getCurrentPlayer(gameId) !== user) {
     res.send(208, 'сейчас не Ваш ход');
