@@ -36,7 +36,7 @@ router.post('/move', users.restricted, (req, res) => {
 });
 
 // авторизация
-router.post('/login', (req, res) => {
+router.post('/signIn', (req, res) => {
   const userId = users.checkLogin(req.body.login, req.body.password);
   res.send(200, userId);
 });
