@@ -17,7 +17,8 @@ router.get('/getWinner', users.restricted, (req, res) => {
 });
 
 router.post('/move', users.restricted, (req, res) => {
-  const { gameId } = req.headers;
+  const gameId = req.headers.gameid;
+  console.log(req.headers);
   const user = users.defineLoginById(req.userCredentials.id);
 
   // if (!controller.isGameActive(gameId)) {
@@ -50,8 +51,8 @@ router.post('/register', (req, res) => {
 // создание игры
 router.post('/newGame', users.restricted, (req, res) => {
   const user = users.defineLoginById(req.userCredentials.id);
-  controller.startNewGame(user.login);
-  res.send(200, 'ok');
+  const gameId = controller.startNewGame(user.login);
+  res.send(200, gameId);
 });
 // список акивных игр
 router.get('/gamesList', users.restricted, (req, res) => {

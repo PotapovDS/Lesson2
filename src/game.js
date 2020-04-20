@@ -113,6 +113,7 @@ function startNewGame(parentUser) {
     status: true,
   };
   games.push(newGame);
+  return newGame.gameId;
 }
 
 function joinGame(gameId, user) {
