@@ -42,6 +42,7 @@ function checkLogin(login, password) {
       id: user.id,
     };
     user.isLogged = true;
+    user.userId = sessionID;
     return sessionID;
   }
   return -1;
