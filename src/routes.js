@@ -4,12 +4,12 @@ const users = require('./lib/users');
 const games = require('./lib/games');
 
 router.get('/getField', users.restricted, (req, res) => {
-  const field = controller.getField(req.headers.gameId);
+  const field = controller.getField(req.headers.gameid);
   res.send(200, field);
 });
 
 router.get('/getWinner', users.restricted, (req, res) => {
-  const winner = controller.getWinner(req.headers.gameId);
+  const winner = controller.getWinner(req.headers.gameid);
   if (!winner) {
     res.send(208, 'победитель не выявлен');
   }
@@ -18,22 +18,21 @@ router.get('/getWinner', users.restricted, (req, res) => {
 
 router.post('/move', users.restricted, (req, res) => {
   const gameId = req.headers.gameid;
-  console.log(req.headers);
   const user = users.defineLoginById(req.userCredentials.id);
 
   // if (!controller.isGameActive(gameId)) {
   //   res.send(208, 'эта игра закончена, выберите другую');
   // }
-  if (!controller.isPlayerInGame(gameId, user)) {
-    res.send(208, `вы ${user} не зарегистрированы, как игрок этой партии`);
-  }
+  // if (!controller.isPlayerInGame(gameId, user)) {
+  //   res.send(208, `вы ${user} не зарегистрированы, как игрок этой партии`);
+  // }
   if (controller.getCurrentPlayer(gameId) !== user) {
     res.send(208, 'сейчас не Ваш ход');
   }
-  const x = req.body.x - 1;
-  const y = req.body.y - 1;
+  const x = req.body.x;
+  const y = req.body.y;
   controller.makeMove(x, y, gameId);
-  res.status(200).send('ok');
+  res.send(200, 'ok');
 });
 
 // авторизация
@@ -73,17 +72,17 @@ router.get('/usersList', users.restricted, (req, res) => {
 });
 // сатус игры
 router.get('/gameStatus', users.restricted, (req, res) => {
-  const gameStatus = controller.getGameStatus(req.headers.gameId);
+  const gameStatus = controller.getGameStatus(req.headers.gameid);
   res.send(200, gameStatus);
 });
 // какой игрок сейчас ходит
 router.get('/getCurrentPlayer', users.restricted, (req, res) => {
-  const currentPlayer = controller.getCurrentPlayer(req.headers.gameId);
+  const currentPlayer = controller.getCurrentPlayer(req.headers.gameid);
   res.send(200, currentPlayer);
 });
 // сброс игры
 router.post('/reset', users.restricted, (req, res) => {
-  controller.reset(req.headers.gameId);
+  controller.reset(req.headers.gameid);
   res.send(200, 'ok');
 });
 

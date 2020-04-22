@@ -4,7 +4,7 @@ const { games } = require('./lib/games');
 const START_FIELD = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 
 function findGame(gameId) {
-  return games.find((el) => el.id === gameId);
+  return games.find((el) => el.gameId == gameId);
 }
 
 function getField(gameId) {
