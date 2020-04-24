@@ -19,14 +19,14 @@ router.get('/getWinner', users.restricted, (req, res) => {
 router.post('/move', users.restricted, (req, res) => {
   const gameId = req.headers.gameid;
   const user = users.defineLoginById(req.userCredentials.id);
-
-  // if (!controller.isGameActive(gameId)) {
-  //   res.send(208, 'эта игра закончена, выберите другую');
-  // }
+  console.log('move user', user);
+  if (!controller.isGameActive(gameId)) {
+    res.send(208, 'эта игра закончена, выберите другую');
+  }
   // if (!controller.isPlayerInGame(gameId, user)) {
   //   res.send(208, `вы ${user} не зарегистрированы, как игрок этой партии`);
   // }
-  if (controller.getCurrentPlayer(gameId) !== user) {
+  if (controller.getCurrentPlayer(gameId) !== user.userName) {
     res.send(208, 'сейчас не Ваш ход');
   }
   const x = req.body.x;
@@ -34,7 +34,6 @@ router.post('/move', users.restricted, (req, res) => {
   controller.makeMove(x, y, gameId);
   res.send(200, 'ok');
 });
-
 // авторизация
 router.post('/signIn', (req, res) => {
   const userId = users.checkLogin(req.body.login, req.body.password);
@@ -50,7 +49,7 @@ router.post('/register', (req, res) => {
 // создание игры
 router.post('/newGame', users.restricted, (req, res) => {
   const user = users.defineLoginById(req.userCredentials.id);
-  const gameId = controller.startNewGame(user.login);
+  const gameId = controller.startNewGame(user.userName);
   res.send(200, gameId);
 });
 // список акивных игр

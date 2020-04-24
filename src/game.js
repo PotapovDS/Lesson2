@@ -97,6 +97,7 @@ function presetField(newField) {
 
 function getCurrentPlayer(gameId) {
   const game = findGame(gameId);
+  console.log('get curret player', game);
   return game.currentPlayer;
 }
 
@@ -136,6 +137,11 @@ function isPlayerInGame(gameId, user) {
   return false;
 }
 
+function isGameActive(gameId) {
+  const game = findGame(gameId);
+  return game.status;
+}
+
 module.exports = {
   getField,
   makeMove,
@@ -148,4 +154,5 @@ module.exports = {
   joinGame,
   getGameStatus,
   isPlayerInGame,
+  isGameActive,
 };

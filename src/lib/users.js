@@ -3,13 +3,13 @@ const uuid = require('uuid');
 const users = [
   {
     id: 1,
-    login: 'max',
+    userName: 'max',
     password: 'qwerty',
     isLogged: false,
   },
   {
     id: 2,
-    login: 'ivan',
+    userName: 'ivan',
     password: 'ytrewq',
     isLogged: false,
   },
@@ -35,7 +35,7 @@ function restricted(req, res, next) {
 }
 
 function checkLogin(login, password) {
-  const user = users.find((el) => el.login === login && el.password === password);
+  const user = users.find((el) => el.userName === login && el.password === password);
   if (user) {
     const sessionID = uuid.v4();
     sessions[sessionID] = {
@@ -58,7 +58,7 @@ function registerNewUser(login, password) {
   }
   const newUser = {
     id: users.length + 1,
-    login,
+    userName,
     password,
     isLogged: false,
   };
