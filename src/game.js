@@ -26,6 +26,7 @@ function isNoMoves(field) {
 }
 
 function isPlayerWin(field, player) {
+  console.log('isPlayerWin field', field, player);
   for (let i = 0; i < 3; i += 1) {
     // горизонталь
     if (field[i][0] == player
@@ -36,7 +37,7 @@ function isPlayerWin(field, player) {
   }
   for (let i = 0; i < 3; i += 1) {
     // вертикаль
-    if (field[0][0] == player
+    if (field[0][i] == player
       && field[1][i] == player
       && field[2][i] == player
     ) {
@@ -68,11 +69,13 @@ function makeMove(x, y, gameId) {
       const player = game.currentPlayer === player1 ? 1 : 2;
       game.field[y][x] = player;
       if (isPlayerWin(game.field, player)) {
+        console.log('isPlayerWin', player);
         game.status = false;
         game.winner = player === 1 ? player1 : player2;
       }
       game.currentPlayer = player === 1 ? player2 : player1;
       if (isNoMoves(game.field)) {
+        console.log('is no moves');
         game.status = false;
       }
       break;
@@ -109,7 +112,11 @@ function startNewGame(parentUser) {
   const newGame = {
     gameId: games.length + 1,
     parentUser,
-    field: START_FIELD,
+    field: [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ],
     currentPlayer: parentUser,
     status: true,
   };

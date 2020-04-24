@@ -23,6 +23,7 @@ router.post('/move', users.restricted, (req, res) => {
   if (!controller.isGameActive(gameId)) {
     res.send(208, 'эта игра закончена, выберите другую');
   }
+  // данная проверка должна происходить при попытке подключиться к игре
   // if (!controller.isPlayerInGame(gameId, user)) {
   //   res.send(208, `вы ${user} не зарегистрированы, как игрок этой партии`);
   // }
