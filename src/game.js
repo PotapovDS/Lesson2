@@ -1,10 +1,18 @@
 const logger = require('./lib/logger');
 const { games } = require('./lib/games');
+const { Game, User} = require('../mongodb');
 
 const START_FIELD = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 
 function findGame(gameId) {
   return games.find((el) => el.gameId == gameId);
+}
+
+function findGameMongo(gameId) { // ищем в базе mongo
+  return Game.findOne(( err, game ) => {
+    if (err) return handleError(err);
+    return game;
+  });
 }
 
 function getField(gameId) {
@@ -100,7 +108,6 @@ function presetField(newField) {
 
 function getCurrentPlayer(gameId) {
   const game = findGame(gameId);
-  console.log('get curret player', game);
   return game.currentPlayer;
 }
 
