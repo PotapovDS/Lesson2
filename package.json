@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./node_modules/.bin/cucumber-js",
     "start": "node ./src/index.js",
-    "start:dev": "nodemon --inspect ./src/index.js"
+    "start:dev": "nodemon --inspect ./src/index.js",
+    "start:mongoDB": "F:/progs/mongoDB/bin/mongod --config F:/progs/mongoDB/bin/mongodb.config"
   },
   "author": "",
   "license": "ISC",

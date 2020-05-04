@@ -1,18 +1,62 @@
+const mongoose = require('mongoose');
 const logger = require('./lib/logger');
-const { games } = require('./lib/games');
+// const { games } = require('./lib/games');
 const { Game, User} = require('../mongodb');
 
 const START_FIELD = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 
-function findGame(gameId) {
-  return games.find((el) => el.gameId == gameId);
+// function startNewGame(parentUser) {
+//   const newGame = {
+//     gameId: games.length + 1,
+//     parentUser,
+//     field: [
+//       [0, 0, 0],
+//       [0, 0, 0],
+//       [0, 0, 0],
+//     ],
+//     currentPlayer: parentUser,
+//     status: true,
+//   };
+//   games.push(newGame);
+//   return newGame.gameId;
+// }
+
+async function startNewGame(parentUser) {
+  let gamesCount;
+  await Game.countDocuments({}, ((err, count) => {
+    gamesCount = count;
+    return gamesCount;
+  }));
+  const newGame = new Game({
+    _id: new mongoose.Types.ObjectId(),
+    gameId: gamesCount,
+    parentUser,
+    currentPlayer: parentUser,
+  });
+  newGame.save((err, game) => {
+    if (err) {
+      console.log('err', err);
+    }
+    console.log('New game: \n', game);
+  });
+  return gamesCount;
 }
 
-function findGameMongo(gameId) { // ищем в базе mongo
-  return Game.findOne(( err, game ) => {
-    if (err) return handleError(err);
-    return game;
+// function findGame(gameId) {
+//   return games.find((el) => el.gameId == gameId);
+// }
+
+async function findGame(gameId) { // ищем в базе mongo
+  let foundedGame;
+  console.log('find game gameID', gameId);
+  await Game.findOne({ gameId }, (err, game) => {
+    if (err) return (err);
+    console.log('findGame', game);
+    foundedGame = game;
+    return foundedGame;
   });
+  console.log('foundedGame inside func', foundedGame);
+  return foundedGame;
 }
 
 function getField(gameId) {
@@ -68,7 +112,11 @@ function isPlayerWin(field, player) {
 }
 
 function makeMove(x, y, gameId) {
-  const game = findGame(gameId);
+  // const game = findGame(gameId);
+  let game;
+  findGame(gameId).then((res) => {
+    game = res;
+  });
 
   while (true) {
     if (isCellEmpty(x, y, game.field)) {
@@ -115,21 +163,6 @@ function showError(error) {
   logger.log(error.body.error);
 }
 
-function startNewGame(parentUser) {
-  const newGame = {
-    gameId: games.length + 1,
-    parentUser,
-    field: [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-    currentPlayer: parentUser,
-    status: true,
-  };
-  games.push(newGame);
-  return newGame.gameId;
-}
 
 function joinGame(gameId, user) {
   const game = findGame(gameId);

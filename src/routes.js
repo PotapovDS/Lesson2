@@ -3,11 +3,25 @@ const controller = require('./game');
 const users = require('./lib/users');
 const games = require('./lib/games');
 
+// создание игры
+router.post('/newGame', users.restricted, (req, res) => {
+  const user = users.defineLoginById(req.userCredentials.id);
+  let gameId;
+  controller.startNewGame(user.userName).then((id) => { // промис
+    if (!id) {
+      throw new Error('id is not found');
+    }
+    gameId = id;
+    res.send(200, gameId);
+    return gameId;
+  }).catch((err) => console.log(err));
+});
+// получаем состояние поля
 router.get('/getField', users.restricted, (req, res) => {
   const field = controller.getField(req.headers.gameid);
   res.send(200, field);
 });
-
+// узнаем победителя игры
 router.get('/getWinner', users.restricted, (req, res) => {
   const winner = controller.getWinner(req.headers.gameid);
   if (!winner) {
@@ -18,6 +32,7 @@ router.get('/getWinner', users.restricted, (req, res) => {
 
 router.post('/move', users.restricted, (req, res) => {
   const gameId = req.headers.gameid;
+  console.log('route move, headers', req.headers);
   const user = users.defineLoginById(req.userCredentials.id);
   console.log('move user', user);
   if (!controller.isGameActive(gameId)) {
@@ -46,12 +61,6 @@ router.post('/register', (req, res) => {
     res.send(208, 'пользователь уже зарегистрирован');
   }
   res.send(200, 'ok');
-});
-// создание игры
-router.post('/newGame', users.restricted, (req, res) => {
-  const user = users.defineLoginById(req.userCredentials.id);
-  const gameId = controller.startNewGame(user.userName);
-  res.send(200, gameId);
 });
 // список акивных игр
 router.get('/gamesList', users.restricted, (req, res) => {
